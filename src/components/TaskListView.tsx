@@ -1,6 +1,6 @@
-import { ArrowLeft, MapPin, Pencil, Users } from 'lucide-react';
+import { ArrowLeft, GraduationCap, MapPin, Pencil, Users } from 'lucide-react';
 import type { Task, TaskStatus, Team, WorkZone } from '../types/task';
-import { formatDisplayDate } from '../data/mockData';
+import { formatDisplayDate, formatZoneLabel } from '../data/mockData';
 
 interface TaskListViewProps {
   status: TaskStatus;
@@ -58,8 +58,7 @@ export function TaskListView({
   const copy = STATUS_COPY[status];
   const teamName = (id: string) =>
     teams.find((t) => t.id === id)?.name ?? 'Equipo';
-  const zoneName = (id: string) =>
-    zones.find((z) => z.id === id)?.name ?? 'Zona';
+  const findZone = (id: string) => zones.find((z) => z.id === id);
 
   return (
     <div className="space-y-4">
@@ -117,15 +116,21 @@ export function TaskListView({
                   </span>
                 </div>
 
-                <div className="flex flex-wrap gap-x-3 gap-y-1 text-[12.5px] font-medium text-[#3F564D]">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[12.5px] font-medium text-[#3F564D]">
                   <span className="inline-flex items-center gap-1">
                     <Users className="h-3.5 w-3.5 text-[#118A56]" />
                     {teamName(task.teamId)}
                   </span>
                   <span className="inline-flex items-center gap-1">
                     <MapPin className="h-3.5 w-3.5 text-[#0E666B]" />
-                    {zoneName(task.zoneId)}
+                    {formatZoneLabel(findZone(task.zoneId))}
                   </span>
+                  {findZone(task.zoneId)?.tag && (
+                    <span className="inline-flex items-center gap-1 rounded bg-[#FEF3C7] px-1.5 py-0.5 text-[11px] font-semibold text-[#92400E]">
+                      <GraduationCap className="h-3 w-3" />
+                      {findZone(task.zoneId)?.tag}
+                    </span>
+                  )}
                 </div>
 
                 {task.comment ? (

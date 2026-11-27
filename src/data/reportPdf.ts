@@ -1,7 +1,7 @@
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import type { Task, Team, WorkZone } from '../types/task';
-import { formatDisplayDate } from './mockData';
+import { formatDisplayDate, formatZoneLabel } from './mockData';
 
 export interface ReportRow {
   label: string;
@@ -134,7 +134,9 @@ export function generateReportPdf({
       formatDisplayDate(task.date),
       task.taskType,
       teams.find((t) => t.id === task.teamId)?.name ?? '—',
-      zones.find((z) => z.id === task.zoneId)?.name ?? '—',
+      task.zoneId
+        ? formatZoneLabel(zones.find((z) => z.id === task.zoneId))
+        : '—',
       statusLabel(task.status),
       task.comment || '—',
     ]),

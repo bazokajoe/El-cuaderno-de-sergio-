@@ -9,17 +9,29 @@ export type TaskTypeName =
   | 'Desbroce'
   | 'Deshierbe'
   | 'Poda de Setos'
-  | 'Recorte Arbustivas';
+  | 'Recorte Arbustivas'
+  | 'Tubería y tubo de riego'
+  | 'Electroválvulas'
+  | 'Fugas';
 
 export interface WorkZone {
   id: string;
+  code?: string;
   name: string;
+  /** Optional zone category/tag such as 'Mantenimiento semanal colegio' */
+  tag?: string;
 }
 
 export interface Team {
   id: string;
   name: string;
   zoneIds: string[];
+  /** When true (e.g. Equipo de Riego), team operates across all zones without owning specific ones */
+  allZones?: boolean;
+  /** Optional team-specific task types overriding the default gardening ones */
+  taskTypes?: string[];
+  /** Optional short note shown in Gestión */
+  description?: string;
 }
 
 export interface Task {

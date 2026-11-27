@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Download, FileBarChart2 } from 'lucide-react';
+import { formatZoneLabel } from '../data/mockData';
 import type { ReportGroupBy, Task, Team, WorkZone } from '../types/task';
 
 interface ReportesViewProps {
@@ -55,7 +56,7 @@ export function ReportesView({
         case 'equipo':
           return teams.find((t) => t.id === task.teamId)?.name ?? 'Equipo';
         case 'zona':
-          return zones.find((z) => z.id === task.zoneId)?.name ?? 'Zona';
+          return formatZoneLabel(zones.find((z) => z.id === task.zoneId));
         case 'tipo':
           return task.taskType;
         case 'estado':
@@ -108,7 +109,7 @@ export function ReportesView({
           zone:
             zoneFilter === 'all'
               ? 'Todas'
-              : (zones.find((z) => z.id === zoneFilter)?.name ?? 'Todas'),
+              : formatZoneLabel(zones.find((z) => z.id === zoneFilter)),
           type: typeFilter === 'all' ? 'Todos' : typeFilter,
         },
       });
@@ -188,7 +189,7 @@ export function ReportesView({
                 <option value="all">Todas</option>
                 {zones.map((z) => (
                   <option key={z.id} value={z.id}>
-                    {z.name}
+                    {formatZoneLabel(z)}
                   </option>
                 ))}
               </select>

@@ -8,7 +8,7 @@ import {
   Send,
 } from 'lucide-react';
 import type { SentRecord, Task, Team, WorkZone } from '../types/task';
-import { formatDateTime, formatDisplayDate } from '../data/mockData';
+import { formatDateTime, formatDisplayDate, formatZoneLabel } from '../data/mockData';
 
 interface EnviarViewProps {
   sent: SentRecord[];
@@ -32,7 +32,7 @@ function buildWhatsAppMessage(
   zones: WorkZone[],
 ): string {
   const lines = selected.map((task) => {
-    const zone = zones.find((z) => z.id === task.zoneId)?.name ?? 'Zona';
+    const zone = formatZoneLabel(zones.find((z) => z.id === task.zoneId));
     return `• ${task.taskType} · ${zone}`;
   });
 
@@ -95,8 +95,10 @@ export function EnviarView({
     const message = buildWhatsAppMessage(teamName, selectedTasks, zones);
     const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
 
-    const firstZone =
-      zones.find((z) => z.id === selectedTasks[0]?.zoneId)?.name ?? 'Varias zonas';
+    const firstZoneObj = zones.find((z) => z.id === selectedTasks[0]?.zoneId);
+    const firstZone = firstZoneObj
+      ? formatZoneLabel(firstZoneObj)
+      : 'Varias zonas';
 
     onRecordSent({
       summary: `WhatsApp · ${teamName}`,
@@ -272,8 +274,9 @@ export function EnviarView({
               <div className="divide-y divide-[#E4EDE8] overflow-hidden rounded-xl border border-[#E4EDE8]">
                 {teamTasks.map((task) => {
                   const checked = selectedIds.includes(task.id);
-                  const zone =
-                    zones.find((z) => z.id === task.zoneId)?.name ?? 'Zona';
+                  const zone = formatZoneLabel(
+                    zones.find((z) => z.id === task.zoneId),
+                  );
                   return (
                     <button
                       key={task.id}

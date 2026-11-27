@@ -8,6 +8,7 @@ import { ReportesView } from './components/ReportesView';
 import { TaskFormView } from './components/TaskFormView';
 import { TaskListView } from './components/TaskListView';
 import {
+  ALL_TASK_TYPES,
   DEFAULT_TASK_TYPES,
   INITIAL_SENT,
   INITIAL_TASKS,
@@ -57,6 +58,17 @@ export function App() {
     }),
     [tasks],
   );
+
+  const allReportTaskTypes = useMemo(() => {
+    const set = new Set<string>(ALL_TASK_TYPES);
+    for (const team of teams) {
+      for (const t of team.taskTypes ?? []) set.add(t);
+    }
+    for (const task of tasks) {
+      set.add(task.taskType);
+    }
+    return Array.from(set);
+  }, [teams, tasks]);
 
   const activeTab = tabFromScreen(screen);
 
@@ -134,9 +146,14 @@ export function App() {
     setScreen({ name: 'gestion' });
   };
 
-  const handleCreateZone = (name: string) => {
+  const handleCreateZone = (
+    name: string,
+    options?: { code?: string; tag?: string },
+  ) => {
     const id = `z-${Date.now()}`;
-    setZones((prev) => [...prev, { id, name }]);
+    const code = options?.code?.trim() || undefined;
+    const tag = options?.tag?.trim() || undefined;
+    setZones((prev) => [...prev, { id, name, ...(code ? { code } : {}), ...(tag ? { tag } : {}) }]);
     return id;
   };
 
@@ -246,7 +263,7 @@ export function App() {
             tasks={tasks}
             teams={teams}
             zones={zones}
-            taskTypes={taskTypes}
+            taskTypes={allReportTaskTypes}
           />
         )}
       </main>
