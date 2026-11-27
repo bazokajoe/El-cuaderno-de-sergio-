@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Bricolage Grotesque", ui-sans-serif, sans-serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-forest-950: #071A15;
+  --color-forest-900: #0B241E;
+  --color-mist-canvas: #EEF3F0;
+  --color-mist-surface: #F7FAF8;
+  --color-mist-border: #D2DFD7;
+  --color-ink-900: #0E1F1A;
+  --color-leaf-600: #118A56;
+  --color-leaf-400: #34D399;
+  --color-petrol-700: #0E666B;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-forest-900);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: var(--color-mist-canvas);
+    background-image:
+      radial-gradient(circle at 8% 14%, rgba(17, 138, 86, 0.06) 0%, transparent 44%),
+      radial-gradient(circle at 92% 78%, rgba(14, 102, 107, 0.06) 0%, transparent 48%),
+      radial-gradient(rgba(14, 31, 26, 0.04) 0.7px, transparent 0.7px);
+    background-size: 100% 100%, 100% 100%, 16px 16px;
+    overscroll-behavior-y: none;
+  }
+}
+
+.hero-atmosphere {
+  background:
+    radial-gradient(95% 80% at 94% 6%, rgba(52, 211, 153, 0.22) 0%, rgba(16, 185, 129, 0.05) 44%, transparent 72%),
+    radial-gradient(85% 75% at 6% 100%, rgba(14, 116, 122, 0.34) 0%, transparent 65%),
+    linear-gradient(156deg, #071A15 0%, #0D2A22 50%, #154034 100%);
+}
+
+@keyframes fadeRise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-rise {
+  animation: fadeRise 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes liveBeacon {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.85);
+    opacity: 0;
+  }
+}
+
+.animate-live-beacon {
+  animation: liveBeacon 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+@keyframes canopyDrift {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translate3d(-10px, 6px, 0) scale(1.06);
+    opacity: 0.9;
+  }
+}
+
+.animate-canopy-drift {
+  animation: canopyDrift 11s ease-in-out infinite;
+}
+
+@keyframes fabPop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-fab-pop {
+  animation: fabPop 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-rise,
+  .animate-live-beacon,
+  .animate-canopy-drift,
+  .animate-fab-pop {
+    animation: none !important;
+  }
+}
+
+.pb-safe-nav {
+  padding-bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.bottom-nav-safe {
+  padding-bottom: max(0.55rem, env(safe-area-inset-bottom, 0px));
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Sergio · Jardinería y Servicios Generales",
+  "short_name": "Sergio",
+  "description": "Cuaderno de campo y gestión de encargos de jardinería y servicios generales para Sergio.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#EEF3F0",
+  "theme_color": "#0B241E",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
