@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0B241E" />
+<title>Sergio · Cuaderno de campo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --ink:#0E1F1A; --muted:#5B7269; --line:#D2DFD7; --soft:#F7FAF8; --bg:#EEF3F0;
+  --leaf:#118A56; --deep:#0B241E; --teal:#0E666B; --mint:#34D399; --white:#fff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);
+  font-family:"Plus Jakarta Sans",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0;background:none}
+.app{max-width:760px;margin:0 auto;padding-bottom:96px}
+.hero{position:relative;overflow:hidden;border-radius:0 0 28px 28px;padding:22px 20px 24px;color:#fff;
+  background:linear-gradient(145deg,#071A15 0%,#0B241E 42%,#154034 100%)}
+.hero:before{content:"";position:absolute;inset:-40px -20px auto auto;width:180px;height:180px;border-radius:50%;
+  background:rgba(52,211,153,.18);filter:blur(30px)}
+.hero > *{position:relative;z-index:1}
+.eyebrow{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#9DD4BF;margin:0}
+h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:-.03em;margin:8px 0 0;font-size:2.05rem}
+.sub{margin:8px 0 0;color:#CBE3D8;font-size:13.5px;line-height:1.4}
+.pad{padding:16px 16px 0}
+.card{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px}
+.grid3{display:grid;gap:10px}
+.stat{display:flex;align-items:center;justify-content:space-between;border-radius:20px;padding:14px 16px;color:#fff;text-align:left}
+.stat.todo{background:linear-gradient(135deg,#0B241E,#164033)}
+.stat.doing{background:linear-gradient(135deg,#0E666B,#117A66)}
+.stat.done{background:linear-gradient(135deg,#1A4E40,#245C4B)}
+.stat .n{font-family:"Bricolage Grotesque",sans-serif;font-size:2.5rem;font-weight:800;line-height:1;letter-spacing:-.04em}
+.stat .t{font-family:"Bricolage Grotesque",sans-serif;font-size:1.15rem;font-weight:700}
+.badge{display:inline-flex;align-items:center;gap:6px;border-radius:8px;padding:3px 8px;font-size:10.5px;font-weight:700}
+.badge.y{background:#FEF08A;color:#633906}
+.badge.g{background:#A7F3D0;color:#065F46}
+.badge.w{background:rgba(255,255,255,.18);color:#fff}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:14px;padding:12px 14px;font-weight:700;font-size:14px}
+.btn.primary{background:var(--leaf);color:#fff;width:100%}
+.btn.dark{background:var(--deep);color:#fff;width:100%}
+.btn.ghost{background:#EEF4F1;color:var(--teal);padding:8px 10px;font-size:12px}
+.btn.chip{border:1px solid var(--line);background:var(--soft);color:#243D34;border-radius:12px;padding:8px 12px;font-size:13px;font-weight:700}
+.btn.chip.on{background:var(--deep);border-color:var(--deep);color:#fff}
+.btn.chip.riego.on{background:var(--teal);border-color:var(--teal)}
+.btn:disabled{opacity:.45}
+.field{display:block;margin-bottom:12px}
+.field span{display:block;font-family:"JetBrains Mono",monospace;font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#536B62;margin-bottom:8px}
+.field input,.field select,.field textarea{
+  width:100%;border:1px solid #CEDCD4;background:var(--soft);border-radius:12px;padding:11px 12px;color:var(--ink);outline:none}
+.field textarea{min-height:96px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--leaf);background:#fff;box-shadow:0 0 0 3px rgba(17,138,86,.16)}
+.search{position:relative}
+.search input{padding-left:36px}
+.search:before{content:"⌕";position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#6B8279;font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.meta{font-size:12.5px;color:var(--muted)}
+.mono{font-family:"JetBrains Mono",monospace;font-size:11px;color:#526960}
+.task{width:100%;text-align:left;border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff;margin-bottom:10px}
+.task.fresh{background:#fff}
+.task.yellow{background:#FEF08A;border-color:rgba(202,138,4,.4)}
+.task.orange{background:#FED09E;border-color:rgba(234,88,12,.4)}
+.task.red{background:#FECACA;border-color:rgba(220,38,38,.4)}
+.task.doing{background:#F1F9F5;border-color:#BBD9CC}
+.task.done{background:#F7FAF8}
+.tag-school{display:inline-flex;align-items:center;gap:4px;background:#FEF3C7;color:#92400E;border-radius:6px;padding:2px 7px;font-size:11px;font-weight:700}
+.tag-riego{display:inline-flex;align-items:center;gap:6px;background:#E6F4F6;color:var(--teal);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600}
+.zone-pill{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;border-radius:8px;padding:5px 8px;font-size:12px;font-weight:600;background:#F1F7F3;color:#2A463C;margin:0 6px 6px 0}
+.zone-pill.school{background:rgba(254,243,199,.7);border:1px solid rgba(245,158,11,.35);color:#78350F}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+  background:rgba(238,243,240,.92);backdrop-filter:blur(10px);border-top:1px solid rgba(210,223,215,.8)}
+.nav-inner{width:100%;max-width:760px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:6px}
+.nav button{border-radius:12px;padding:10px 6px;font-size:11.5px;font-weight:700;color:#536B62}
+.nav button.on{background:#E8F6EF;color:#0B5133}
+.fab{position:fixed;right:18px;bottom:86px;z-index:40;width:56px;height:56px;border-radius:18px;background:var(--leaf);color:#fff;
+  box-shadow:0 14px 28px -12px rgba(17,138,86,.7);font-size:28px;line-height:1;display:flex;align-items:center;justify-content:center}
+.fab-menu{position:fixed;right:18px;bottom:152px;z-index:40;display:grid;gap:8px}
+.fab-menu button{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-weight:700;font-size:13px;box-shadow:0 10px 24px -16px rgba(7,26,21,.5);text-align:left}
+.scrim{position:fixed;inset:0;background:rgba(7,26,21,.35);backdrop-filter:blur(1px);z-index:35}
+.back{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);color:#D7ECE3;border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;margin-bottom:10px}
+.status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.status-grid button{border:1px solid var(--line);background:var(--soft);border-radius:12px;padding:10px 6px;font-size:13px;font-weight:700;color:#2A423A}
+.status-grid button.on{border-color:var(--leaf);background:#E8F6EF;color:#0B5133}
+.empty{text-align:center;color:var(--muted);padding:36px 12px;font-size:14px}
+.team-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;margin:0}
+.more{color:var(--teal);font-size:12.5px;font-weight:700;margin-top:8px}
+.hidden{display:none!important}
+@media(min-width:768px){.hero{border-radius:28px;margin-top:16px}.pad{padding-left:4px;padding-right:4px}.app{padding:0 16px 110px}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+const SEED = {"SCHOOL":"Mantenimiento semanal colegio","GARDEN_TYPES":["Perfilado","Desbroce","Deshierbe","Poda de Setos","Recorte Arbustivas"],"RIEGO_TYPES":["Tubería y tubo de riego","Electroválvulas","Fugas"],"ZONES":[{"id":"z-38915","name":"Via Asima","code":"38915"},{"id":"z-38813","name":"Rtda. y Parterre 16 de Julio","code":"38813"},{"id":"z-38910","name":"Cala Malgrana ZV","code":"38910"},{"id":"z-38539","name":"Cala Moreia Mob.","code":"38539"},{"id":"z-40070","name":"Son Fuster Vell","code":"40070"},{"id":"z-38600","name":"Cala Marçal EV","code":"38600"},{"id":"z-50050","name":"Son Fuster Makro","code":"50050"},{"id":"z-38815","name":"Butano (Pol. Son Castelló)","code":"38815"},{"id":"z-38523","name":"Cas Capella","code":"38523"},{"id":"z-38628","name":"Galatzó","code":"38628"},{"id":"z-20166","name":"Plaça de Sa Indioteria (Licinio Lafuente, Plaza)","code":"20166"},{"id":"z-20136","name":"Miquel Riera i Perelló, Plaza","code":"20136"},{"id":"z-38814","name":"Príncipe España (Pol. Son Castelló)","code":"38814"},{"id":"z-20165","name":"Rtda. y Part. Cno. Vjo. Bunyola","code":"20165"},{"id":"z-20191","name":"Tortosa","code":"20191"},{"id":"z-20194","name":"Parc de Bartomeu Verd","code":"20194"},{"id":"z-38614","name":"Mediana Aragón","code":"38614"},{"id":"z-40040","name":"Mediana Aragón-Son Rullán","code":"40040"},{"id":"z-38593","name":"Son Fuster Nou (Pedro Poveda)","code":"38593"},{"id":"z-20179","name":"Campo de Fútbol Son Fuster","code":"20179"},{"id":"z-38847","name":"Son Fuster, Cala Mitjana ZV","code":"38847"},{"id":"z-38845","name":"Son Fuster, Sa Nostra ZV","code":"38845"},{"id":"z-38846","name":"Can Foradí ZV","code":"38846"},{"id":"z-38525","name":"Iglesia Son Fuster ZV","code":"38525"},{"id":"z-38876","name":"Son Rullán ZV","code":"38876"},{"id":"z-38652","name":"Félix Rodríguez de la Fuente","code":"38652"},{"id":"z-20163","name":"Virgen de Lluch, Plaza","code":"20163"},{"id":"z-20162","name":"Viviendas Virgen de Lluch","code":"20162"},{"id":"z-50022","name":"Z.V. Calle Son Fuster Nou","code":"50022"},{"id":"z-50065","name":"Parc de les Palmeres","code":"50065"},{"id":"z-50027","name":"Solar Aragón 325","code":"50027"},{"id":"z-50032","name":"Pasaje Cala Millor","code":"50032"},{"id":"z-50040","name":"Can Salou","code":"50040"},{"id":"z-38538","name":"Cala Serena Mob.","code":"38538"},{"id":"z-38540","name":"Cala Montdragó Mob.","code":"38540"},{"id":"z-38541","name":"Cala Pi Mob.","code":"38541"},{"id":"z-38543","name":"Cala Gran Mob.","code":"38543"},{"id":"z-38725","name":"Arquebisbe Miquel Roca Mob.","code":"38725"},{"id":"z-38785","name":"Cales de Mallorca Mob.","code":"38785"},{"id":"z-38571","name":"Baltasar Valentí (Cristo Rey) Mob.","code":"38571"},{"id":"z-20018","name":"Ca'n Llimona, Parque","code":"20018"},{"id":"z-38524","name":"Músico Arrieta","code":"38524"},{"id":"z-38844","name":"Ses Cases de Son Ametler ZV","code":"38844"},{"id":"z-jem-al06","name":"Casal de Son Ametler ZV","code":"JEM-AL06"},{"id":"z-20013","name":"Álamo (Alber)","code":"20013"},{"id":"z-20145","name":"Rafal Nou Plaza","code":"20145"},{"id":"z-20114","name":"Centro de Salud Vivero/Rafal","code":"20114"},{"id":"z-09158","name":"Crèdit Balear","code":"09158"},{"id":"z-38788","name":"Son Gibert Parque","code":"38788"},{"id":"z-38750","name":"Baladre Esq. Alber","code":"38750"},{"id":"z-38751","name":"Baladre Esq. Taronger","code":"38751"},{"id":"z-20137","name":"Josep Maria Llompart, Plaza","code":"20137"},{"id":"z-20146","name":"Rafal Vell","code":"20146"},{"id":"z-38604","name":"Blanes Viale EV","code":"38604"},{"id":"z-38603","name":"Romero de Torres EV","code":"38603"},{"id":"z-38789","name":"Son Gibert Rotonda","code":"38789"},{"id":"z-38555","name":"Lanzone Mob.","code":"38555"},{"id":"z-38559","name":"Wagner Mob.","code":"38559"},{"id":"z-38561","name":"Beethoven Mob.","code":"38561"},{"id":"z-38570","name":"Selva Mob.","code":"38570"},{"id":"z-38588","name":"Plaza Segovia, Mob.","code":"38588"},{"id":"z-38724","name":"Mestre Perosi Mob.","code":"38724"},{"id":"z-es-60027","name":"Es Vivero","code":"ES-60027","tag":"Mantenimiento semanal colegio"},{"id":"z-es-60028","name":"Rafal Nou (Selva, 11)","code":"ES-60028","tag":"Mantenimiento semanal colegio"},{"id":"z-20209","name":"Ses Sorts","code":"20209"},{"id":"z-20217","name":"Talud Ses Sorts","code":"20217"},{"id":"z-20011","name":"Virgen de Monserrat (Mare de Déu de Monserrat)","code":"20011"},{"id":"z-20149","name":"Rtda. Virg. Monserrat/Ind. Prieto","code":"20149"},{"id":"z-38736","name":"Parking Virgen de Monserrat (Mare de Déu de Monserrat)","code":"38736"},{"id":"z-40060","name":"Son Guells","code":"40060"},{"id":"z-50012","name":"Son Morro Norte","code":"50012"},{"id":"z-50019","name":"Son Morro Centro","code":"50019"},{"id":"z-50016","name":"Estadi Balear ZV 1","code":"50016"},{"id":"z-50017","name":"Estadi Balear ZV 2","code":"50017"},{"id":"z-50018","name":"Estadi Balear ZV 3","code":"50018"},{"id":"z-50024","name":"Mare de Déu de la Victoria","code":"50024"},{"id":"z-mediana-servicios-levante","name":"Mediana Servicios Levante"},{"id":"z-20215","name":"Ctra. Manacor","code":"20215"},{"id":"z-20150","name":"S'Hostalets","code":"20150"},{"id":"z-20214","name":"C/ Tomás Rullán","code":"20214"},{"id":"z-20197","name":"Antillón (Isidoro Antillón)","code":"20197"},{"id":"z-20218","name":"Jardineras Calle Aragón","code":"20218"},{"id":"z-38606","name":"Jorge Luis Borges EV","code":"38606"},{"id":"z-20199","name":"Parterre Aragón (Olivo)","code":"20199"},{"id":"z-20189","name":"Rtda. Miquel Dolç (H. Tte. Coronel Franco)","code":"20189"},{"id":"z-50063","name":"Nuredduna","code":"50063"},{"id":"z-38615","name":"Túnel Aragón","code":"38615"},{"id":"z-38534","name":"Josep Darder Metge Mob.","code":"38534"},{"id":"z-20128","name":"Manacor","code":"20128"},{"id":"z-20198","name":"Manacor (Caballito)","code":"20198"},{"id":"z-50002","name":"Sant Francesc Xavier","code":"50002"},{"id":"z-20120","name":"Francesc Garcia Orell, Plaza","code":"20120"},{"id":"z-20017","name":"Centro de Salud Son Gotleu","code":"20017"},{"id":"z-20213","name":"Ses Veles","code":"20213"},{"id":"z-38617","name":"Colegio Son Gotleu","code":"38617"},{"id":"z-20164","name":"Fra Joan Alzina, Plaza","code":"20164"},{"id":"z-38904","name":"Joanot Colom","code":"38904"},{"id":"z-20127","name":"Málaga","code":"20127"},{"id":"z-20190","name":"Orson Welles, Plaza","code":"20190"},{"id":"z-50056","name":"Guillem Moragues","code":"50056"},{"id":"z-50025","name":"Jardineras Costa i Llobera","code":"50025"},{"id":"z-50028","name":"Parterre Pere Garau","code":"50028"},{"id":"z-38551","name":"Pic Puigmal Mob.","code":"38551"},{"id":"z-38553","name":"Celia Viñas Mob.","code":"38553"},{"id":"z-38558","name":"Pic Almanzor Mob.","code":"38558"},{"id":"z-38560","name":"Pic Auñamendi Mob.","code":"38560"},{"id":"z-38565","name":"Pere Garau Mob.","code":"38565"},{"id":"z-38586","name":"Regal Mob.","code":"38586"},{"id":"z-38626","name":"Indalecio Prieto Mob.","code":"38626"},{"id":"z-es-60030","name":"Es Pont (Indalecio Prieto, 85)","code":"ES-60030","tag":"Mantenimiento semanal colegio"},{"id":"z-es-60031","name":"Gabriel Vallseca (Mare Déu de la Victòria, 36)","code":"ES-60031","tag":"Mantenimiento semanal colegio"},{"id":"z-es-60036","name":"Jafudà Cresques (Faust Morell, 27)","code":"ES-60036","tag":"Mantenimiento semanal colegio"},{"id":"z-es-60035","name":"Son Canals (Bisbe Cabanelles, 25)","code":"ES-60035","tag":"Mantenimiento semanal colegio"},{"id":"z-20178","name":"Ciutat de Querétaro","code":"20178"},{"id":"z-20135","name":"México Avda.","code":"20135"},{"id":"z-38556","name":"Caracas ZV","code":"38556"},{"id":"z-40090","name":"Escuela Taller","code":"40090"},{"id":"z-50014","name":"Son Puça","code":"50014"},{"id":"z-50013","name":"Can Blau","code":"50013"},{"id":"z-50033","name":"Calle Bogotá","code":"50033"},{"id":"z-38576","name":"Mínimos Mob.","code":"38576"},{"id":"z-38587","name":"Lima (Pol. Levante), Mob.","code":"38587"},{"id":"z-00280","name":"Frente Marítimo - Los Ceibos","code":"00280"},{"id":"z-00281","name":"Frente Marítimo - Albert Camus","code":"00281"},{"id":"z-00306","name":"Joan Maragall","code":"00306"},{"id":"z-38882","name":"Plaça de la Guàrdia Civil","code":"38882"},{"id":"z-20216","name":"Manuel Azaña (mob)","code":"20216"},{"id":"z-50023","name":"Parking Manacor Vallado","code":"50023"},{"id":"z-jem-al05","name":"Síquia de la Vila","code":"JEM-AL05"},{"id":"z-es-60037","name":"Alexandre Rosselló","code":"ES-60037","tag":"Mantenimiento semanal colegio"},{"id":"z-50035","name":"Fachada Marítima Fase 0","code":"50035"},{"id":"z-50036","name":"Fachada Marítima Fase II","code":"50036"},{"id":"z-50037","name":"Fachada Marítima Fase III (Can Palou)","code":"50037"},{"id":"z-50020","name":"Fachada Marítima Fase IV (Parc Son Pedrals)","code":"50020"},{"id":"z-parque-wifi","name":"Parque WIFI"},{"id":"z-son-malferit-este","name":"Son Malferit Este"},{"id":"z-son-malferit-oeste","name":"Son Malferit Oeste"},{"id":"z-mediana-poligono","name":"Mediana Polígono"}],"TEAMS":[{"id":"eq-1","name":"Equipo 1","zoneIds":["z-38915","z-38813","z-38910","z-38539","z-40070","z-38600","z-50050","z-38815","z-38523","z-38628","z-20166","z-20136","z-38814","z-20165","z-20191","z-20194","z-38614","z-40040","z-38593","z-20179","z-38847","z-38845","z-38846","z-38525","z-38876","z-38652","z-20163","z-20162","z-50022","z-50065","z-50027","z-50032","z-50040","z-38538","z-38540","z-38541","z-38543","z-38725","z-38785"],"description":"Comparte las 39 zonas con Equipo 2"},{"id":"eq-2","name":"Equipo 2","zoneIds":["z-38915","z-38813","z-38910","z-38539","z-40070","z-38600","z-50050","z-38815","z-38523","z-38628","z-20166","z-20136","z-38814","z-20165","z-20191","z-20194","z-38614","z-40040","z-38593","z-20179","z-38847","z-38845","z-38846","z-38525","z-38876","z-38652","z-20163","z-20162","z-50022","z-50065","z-50027","z-50032","z-50040","z-38538","z-38540","z-38541","z-38543","z-38725","z-38785"],"description":"Comparte las 39 zonas con Equipo 1"},{"id":"eq-3","name":"Equipo 3","zoneIds":["z-38571","z-20018","z-38524","z-38844","z-jem-al06","z-20013","z-20145","z-20114","z-09158","z-38788","z-38750","z-38751","z-20137","z-20146","z-38604","z-38603","z-38789","z-38555","z-38559","z-38561","z-38570","z-38588","z-38724","z-es-60027","z-es-60028"]},{"id":"eq-4","name":"Equipo 4","zoneIds":["z-20209","z-20217","z-20011","z-20149","z-38736","z-40060","z-50012","z-50019","z-50016","z-50017","z-50018","z-50024","z-mediana-servicios-levante"]},{"id":"eq-5","name":"Equipo 5","zoneIds":["z-20215","z-20150","z-20214","z-20197","z-20218","z-38606","z-20199","z-20189","z-50063","z-38615","z-38534","z-20128","z-20198","z-50002","z-20120","z-20017","z-20213","z-38617","z-20164","z-38904","z-20127","z-20190","z-50056","z-50025","z-50028","z-38551","z-38553","z-38558","z-38560","z-38565","z-38586","z-38626","z-es-60030","z-es-60031","z-es-60036","z-es-60035"]},{"id":"eq-6","name":"Equipo 6","zoneIds":["z-20178","z-20135","z-38556","z-40090","z-50014","z-50013","z-50033","z-38576","z-38587"]},{"id":"eq-6-bis","name":"Equipo 6 BIS","zoneIds":["z-00280","z-00281","z-00306","z-38882","z-20216","z-50023","z-jem-al05","z-es-60037"]},{"id":"eq-15","name":"Equipo 15 (Fachada Marítima)","zoneIds":["z-50035","z-50036","z-50037","z-50020"]},{"id":"eq-parque-wifi","name":"Parque WIFI","zoneIds":["z-parque-wifi"]},{"id":"eq-16","name":"Equipo 16","zoneIds":["z-son-malferit-este","z-son-malferit-oeste","z-mediana-poligono"]},{"id":"eq-riego","name":"Equipo de Riego","zoneIds":[],"allZones":true,"taskTypes":["Tubería y tubo de riego","Electroválvulas","Fugas"],"description":"Sin zonas propias · Opera en cualquiera de las 138 zonas"}],"TASKS":[{"id":"t-1","code":"TAR-214","status":"TODO","taskType":"Poda de Setos","teamId":"eq-1","zoneId":"z-38915","date":"2026-11-27","createdAt":1795795637082,"comment":"Lateral oeste junto a la entrada principal de Via Asima.","updatedAt":1795795637082},{"id":"t-2","code":"TAR-215","status":"TODO","taskType":"Fugas","teamId":"eq-riego","zoneId":"z-50065","date":"2026-11-26","createdAt":1795705637082,"comment":"Fuga localizada junto a la arqueta norte del Parc de les Palmeres.","updatedAt":1795705637082},{"id":"t-3","code":"TAR-216","status":"TODO","taskType":"Deshierbe","teamId":"eq-3","zoneId":"z-es-60027","date":"2026-11-25","createdAt":1795615637082,"comment":"Revisión semanal de patio y accesos del colegio Es Vivero.","updatedAt":1795615637082},{"id":"t-4","code":"TAR-217","status":"TODO","taskType":"Perfilado","teamId":"eq-5","zoneId":"z-50063","date":"2026-11-23","createdAt":1795453637082,"comment":"Pendiente desde el jueves. Revisar bordillos en Nuredduna.","updatedAt":1795453637082},{"id":"t-5","code":"TAR-210","status":"DOING","taskType":"Electroválvulas","teamId":"eq-riego","zoneId":"z-50035","date":"2026-11-27","createdAt":1795802837082,"comment":"Sustitución de electroválvula en sector 2 de Fachada Marítima Fase 0.","updatedAt":1795810037082},{"id":"t-6","code":"TAR-211","status":"DOING","taskType":"Desbroce","teamId":"eq-2","zoneId":"z-38813","date":"2026-11-27","createdAt":1795799237082,"comment":"Mitad norte hecha en Rtda. y Parterre 16 de Julio.","updatedAt":1795811837082},{"id":"t-7","code":"TAR-205","status":"DONE","taskType":"Perfilado","teamId":"eq-4","zoneId":"z-20209","date":"2026-11-26","createdAt":1795712837082,"comment":"Cerrado sin incidencias en Ses Sorts.","updatedAt":1795741637082},{"id":"t-8","code":"TAR-206","status":"DONE","taskType":"Poda de Setos","teamId":"eq-6","zoneId":"z-20178","date":"2026-11-26","createdAt":1795698437082,"comment":"Restos recogidos y retirados en Ciutat de Querétaro.","updatedAt":1795734437082},{"id":"t-9","code":"TAR-203","status":"DONE","taskType":"Deshierbe","teamId":"eq-3","zoneId":"z-20146","date":"2026-11-25","createdAt":1795633637082,"comment":"","updatedAt":1795669637082}]};
+const STORAGE_KEY = 'sergio-cuaderno-v1';
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(parsed && Array.isArray(parsed.tasks) && Array.isArray(parsed.zones) && Array.isArray(parsed.teams)) return parsed;
+    }
+  }catch(e){}
+  return {
+    zones: structuredClone(SEED.ZONES),
+    teams: structuredClone(SEED.TEAMS),
+    tasks: structuredClone(SEED.TASKS).map(t => ({...t})),
+  };
+}
+
+let state = loadState();
+let screen = { name:'dashboard' };
+let fabOpen = false;
+let gestionQ = '';
+let form = null;
+
+function save(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    zones: state.zones, teams: state.teams, tasks: state.tasks
+  }));
+}
+
+function esc(s){
+  return String(s??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function zoneLabel(z){
+  if(!z) return 'Zona';
+  return z.code ? z.code + ' · ' + z.name : z.name;
+}
+
+function findZone(id){ return state.zones.find(z => z.id === id); }
+function findTeam(id){ return state.teams.find(t => t.id === id); }
+
+function zonesForTeam(team){
+  if(!team || team.allZones) return state.zones;
+  const set = new Set(team.zoneIds||[]);
+  return state.zones.filter(z => set.has(z.id));
+}
+
+function typesForTeam(team){
+  if(team && team.taskTypes && team.taskTypes.length) return team.taskTypes;
+  return SEED.GARDEN_TYPES;
+}
+
+function deviceDateISO(d=new Date()){
+  return d.toISOString().slice(0,10);
+}
+
+function formatDisplayDate(iso){
+  const [y,m,d] = iso.split('-').map(Number);
+  if(!y||!m||!d) return iso;
+  return new Date(y,m-1,d).toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'});
+}
+
+function nextCode(){
+  const nums = state.tasks.map(t => Number(String(t.code).replace(/\D/g,''))).filter(n => !Number.isNaN(n));
+  return 'TAR-' + ((nums.length ? Math.max(...nums) : 200) + 1);
+}
+
+function counts(){
+  return {
+    TODO: state.tasks.filter(t=>t.status==='TODO').length,
+    DOING: state.tasks.filter(t=>t.status==='DOING').length,
+    DONE: state.tasks.filter(t=>t.status==='DONE').length,
+  };
+}
+
+function ageTier(createdAt){
+  const days = (Date.now()-createdAt)/(86400000);
+  if(days>3) return 'red';
+  if(days>2) return 'orange';
+  if(days>1) return 'yellow';
+  return 'fresh';
+}
+
+function greeting(){
+  const h = new Date().getHours();
+  if(h>=6 && h<14) return 'Buenos días';
+  if(h>=14 && h<21) return 'Buenas tardes';
+  return 'Buenas noches';
+}
+
+function go(s){ screen = s; fabOpen = false; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+function ensureForm(task){
+  const teamId = task?.teamId || state.teams[0]?.id || '';
+  const team = findTeam(teamId);
+  const types = typesForTeam(team);
+  const zones = zonesForTeam(team);
+  form = {
+    mode: task ? 'edit' : 'create',
+    taskId: task?.id || null,
+    teamId,
+    taskType: task?.taskType || types[0] || '',
+    zoneId: task?.zoneId || zones[0]?.id || '',
+    status: task?.status || 'TODO',
+    comment: task?.comment || '',
+    zoneQ: '',
+    date: task?.date || deviceDateISO(),
+  };
+}
+
+function saveTask(){
+  const team = findTeam(form.teamId);
+  const types = typesForTeam(team);
+  let zones = zonesForTeam(team);
+  const q = form.zoneQ.trim().toLowerCase();
+  if(q) zones = zones.filter(z => (`${z.code||''} ${z.name} ${z.tag||''}`).toLowerCase().includes(q));
+  const zoneId = zones.some(z=>z.id===form.zoneId) ? form.zoneId : (zones[0]?.id || '');
+  const taskType = types.includes(form.taskType) ? form.taskType : (types[0]||'');
+  if(!team || !zoneId || !taskType) return;
+  const now = Date.now();
+  if(form.mode==='edit' && form.taskId){
+    state.tasks = state.tasks.map(t => t.id===form.taskId ? {...t, teamId:form.teamId, zoneId, taskType, status:form.status, comment:form.comment.trim(), updatedAt:now} : t);
+    save();
+    go({name:'list', status:form.status});
+    return;
+  }
+  const created = {
+    id: 't-'+now, code: nextCode(), createdAt: now, updatedAt: now,
+    teamId: form.teamId, zoneId, taskType, status: form.status,
+    comment: form.comment.trim(), date: form.date,
+  };
+  state.tasks = [created, ...state.tasks];
+  save();
+  go({name:'list', status:form.status});
+}
+
+function schoolCount(){ return state.zones.filter(z=>z.tag===SEED.SCHOOL).length; }
+
+function renderNav(active){
+  const c = counts();
+  return `<nav class="nav"><div class="nav-inner">
+    <button data-nav="inicio" class="${active==='inicio'?'on':''}">Inicio${c.DOING?` · ${c.DOING}`:''}</button>
+    <button data-nav="gestion" class="${active==='gestion'?'on':''}">Gestión</button>
+    <button data-nav="enviar" class="${active==='enviar'?'on':''}">Enviar</button>
+    <button data-nav="reportes" class="${active==='reportes'?'on':''}">Reportes</button>
+  </div></nav>`;
+}
+
+function renderFab(){
+  return `
+  ${fabOpen?'<div class="scrim" id="scrim"></div>':''}
+  ${fabOpen?`<div class="fab-menu">
+    <button data-fab="nueva-tarea">＋ Nueva tarea</button>
+    <button data-fab="gestion">Gestión</button>
+    <button data-fab="enviar">Enviar tareas</button>
+    <button data-fab="reportes">Crear reporte</button>
+  </div>`:''}
+  <button class="fab" id="fab">${fabOpen?'×':'+'}</button>`;
+}
+
+function renderDashboard(){
+  const c = counts();
+  return `
+  <header class="hero">
+    <p class="eyebrow">Sergio · Jardinería y servicios</p>
+    <h1>${esc(greeting())}, Sergio.</h1>
+    <p class="sub">11 equipos · 138 zonas · Equipo de Riego global. Datos guardados en este dispositivo.</p>
+  </header>
+  <div class="pad grid3">
+    <button class="stat todo" data-open="TODO"><div><span class="badge y">Pendientes de hoy</span><div style="display:flex;align-items:end;gap:12px;margin-top:10px"><span class="n">${c.TODO}</span><span class="t">Por hacer</span></div></div><span>→</span></button>
+    <button class="stat doing" data-open="DOING"><div><span class="badge g">Ongoing · en obra</span><div style="display:flex;align-items:end;gap:12px;margin-top:10px"><span class="n">${c.DOING}</span><span class="t">En curso</span></div></div><span>→</span></button>
+    <button class="stat done" data-open="DONE"><div><span class="badge w">Cerradas y listas</span><div style="display:flex;align-items:end;gap:12px;margin-top:10px"><span class="n">${c.DONE}</span><span class="t">Hechas</span></div></div><span>→</span></button>
+  </div>`;
+}
+
+function renderList(status){
+  const titles = {TODO:['Por hacer','TO DO'], DOING:['En curso','ONGOING'], DONE:['Hechas','DONE']};
+  const [title,code] = titles[status];
+  const tasks = state.tasks.filter(t=>t.status===status).sort((a,b)=>a.createdAt-b.createdAt);
+  return `
+  <header class="hero">
+    <button class="back" data-back>← Dashboard</button>
+    <h1>${title}</h1>
+    <p class="eyebrow" style="margin-top:8px">${code} · ${tasks.length}</p>
+  </header>
+  <div class="pad">
+    ${tasks.length===0?'<p class="empty">No hay tareas en este estado.</p>':tasks.map(t=>{
+      const team = findTeam(t.teamId);
+      const zone = findZone(t.zoneId);
+      const cls = status==='TODO'?ageTier(t.createdAt):(status==='DOING'?'doing':'done');
+      return `<button class="task ${cls}" data-edit="${esc(t.id)}">
+        <div class="row"><div><div class="mono">${esc(t.code)} · ${esc(formatDisplayDate(t.date))}</div>
+        <div style="font-size:16px;font-weight:700;margin-top:4px">${esc(t.taskType)}</div></div>
+        <span class="btn ghost">Editar</span></div>
+        <div class="meta" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:8px">
+          <span>${esc(team?.name||'Equipo')}</span>
+          <span>${esc(zoneLabel(zone))}</span>
+          ${zone?.tag?`<span class="tag-school">${esc(zone.tag)}</span>`:''}
+        </div>
+        ${t.comment?`<p class="meta" style="margin:8px 0 0">${esc(t.comment)}</p>`:''}
+      </button>`;
+    }).join('')}
+  </div>`;
+}
+
+function renderGestion(){
+  const q = gestionQ.trim().toLowerCase();
+  return `
+  <header class="hero">
+    <p class="eyebrow">${state.teams.length} equipos · ${state.zones.length} zonas únicas · ${schoolCount()} colegios</p>
+    <h1>Gestión</h1>
+    <p class="sub">Equipos reales, zonas con código, colegios y Equipo de Riego global.</p>
+  </header>
+  <div class="pad">
+    <div class="search" style="margin-bottom:12px"><input id="gestion-q" type="search" placeholder="Buscar equipo, código, zona o colegio..." value="${esc(gestionQ)}" /></div>
+    ${state.teams.map(team=>{
+      const isRiego = !!team.allZones;
+      const linked = isRiego ? [] : state.zones.filter(z => (team.zoneIds||[]).includes(z.id));
+      const matching = q ? linked.filter(z => (`${z.code||''} ${z.name} ${z.tag||''}`).toLowerCase().includes(q)) : linked;
+      const teamHit = !q || (`${team.name} ${team.description||''} ${(team.taskTypes||[]).join(' ')}`).toLowerCase().includes(q) || matching.length>0;
+      if(!teamHit) return '';
+      const schools = linked.filter(z=>z.tag===SEED.SCHOOL).length;
+      const show = q ? (matching.length?matching:linked) : linked.slice(0,6);
+      const more = (!q && linked.length>6) ? linked.length-6 : 0;
+      return `<article class="card" style="${isRiego?'border-color:#A7D5DA':''}">
+        <h3 class="team-title">${isRiego?'💧':'👥'} ${esc(team.name)}</h3>
+        <p class="meta" style="margin:6px 0 0">${isRiego
+          ? `Sin zonas propias · Acceso a las ${state.zones.length} zonas`
+          : `${linked.length} zona${linked.length===1?'':'s'}${schools?` (incl. ${schools} colegio${schools===1?'':'s'})`:''}${team.description?' · '+esc(team.description):''}`}</p>
+        ${isRiego?`<div style="margin-top:12px"><div class="mono" style="margin-bottom:8px">TIPOS DE AVERÍA DE RIEGO</div><div class="chips">${(team.taskTypes||[]).map(t=>`<span class="tag-riego">${esc(t)}</span>`).join('')}</div></div>`
+        :`<div style="margin-top:12px">${show.map(z=>`<span class="zone-pill ${z.tag?'school':''}">${z.code?`<span class="mono">${esc(z.code)}</span>`:''}<span>${esc(z.name)}</span>${z.tag?`<span class="tag-school">${esc(z.tag)}</span>`:''}</span>`).join('')}${more?`<div class="more">+ ${more} más (${linked.length} en total)</div>`:''}</div>`}
+      </article>`;
+    }).join('')}
+  </div>`;
+}
+
+function renderForm(){
+  if(!form) ensureForm(null);
+  const team = findTeam(form.teamId);
+  const types = typesForTeam(team);
+  const isRiego = !!team?.allZones;
+  let zones = zonesForTeam(team);
+  const totalZones = zones.length;
+  const q = form.zoneQ.trim().toLowerCase();
+  if(q) zones = zones.filter(z => (`${z.code||''} ${z.name} ${z.tag||''}`).toLowerCase().includes(q));
+  const zoneId = zones.some(z=>z.id===form.zoneId) ? form.zoneId : (zones[0]?.id || '');
+  form.zoneId = zoneId;
+  if(!types.includes(form.taskType)) form.taskType = types[0]||'';
+  const selectedZone = findZone(zoneId);
+  return `
+  <header class="hero">
+    <button class="back" data-back>← Volver</button>
+    <h1>${form.mode==='create'?'Nueva tarea':'Editar tarea'}</h1>
+    <p class="sub">Fecha del móvil: ${esc(formatDisplayDate(form.date))}</p>
+  </header>
+  <div class="pad">
+    <div class="card">
+      <label class="field"><span>Equipo</span>
+        <select id="f-team">${state.teams.map(t=>`<option value="${esc(t.id)}" ${t.id===form.teamId?'selected':''}>${esc(t.name)}</option>`).join('')}</select>
+      </label>
+      ${isRiego?`<p class="tag-riego" style="margin:0 0 12px">Equipo de Riego: acceso a las ${totalZones} zonas y tipos de avería propios</p>`:''}
+      <div class="field"><span>${isRiego?'Tipo de avería (Riego)':'Tipo de tarea'}</span>
+        <div class="chips" id="f-types">${types.map(t=>`<button type="button" class="btn chip ${isRiego?'riego':''} ${form.taskType===t?'on':''}" data-type="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+      </div>
+      <div class="field"><span>Zona de trabajo · ${zones.length}${q?` de ${totalZones}`:''}</span>
+        ${totalZones>10?`<div class="search" style="margin-bottom:8px"><input id="f-zoneq" type="search" placeholder="Buscar por código, nombre o colegio..." value="${esc(form.zoneQ)}" /></div>`:''}
+        <select id="f-zone" ${zones.length?'' :'disabled'}>
+          ${zones.length?zones.map(z=>`<option value="${esc(z.id)}" ${z.id===zoneId?'selected':''}>${esc(zoneLabel(z))}${z.tag?' · Colegio':''}</option>`).join(''):'<option>Sin coincidencias</option>'}
+        </select>
+      </div>
+      ${selectedZone?.tag?`<p class="tag-school" style="margin:0 0 12px">${esc(selectedZone.tag)}</p>`:''}
+      <div class="field"><span>Estado</span>
+        <div class="status-grid">
+          <button type="button" class="${form.status==='TODO'?'on':''}" data-status="TODO">Por hacer</button>
+          <button type="button" class="${form.status==='DOING'?'on':''}" data-status="DOING">En curso</button>
+          <button type="button" class="${form.status==='DONE'?'on':''}" data-status="DONE">Hecha</button>
+        </div>
+      </div>
+      <label class="field" style="margin-bottom:0"><span>Comentario de Sergio</span>
+        <textarea id="f-comment" placeholder="Anota incidencias, material o detalle de la zona...">${esc(form.comment)}</textarea>
+      </label>
+    </div>
+    <button class="btn primary" id="f-save" ${(!form.taskType||!form.teamId||!zoneId)?'disabled':''}>${form.mode==='create'?'Guardar tarea':'Guardar cambios'}</button>
+  </div>`;
+}
+
+function renderEnviar(){
+  const byTeam = state.teams.map(t => ({
+    team:t,
+    tasks: state.tasks.filter(x=>x.teamId===t.id)
+  })).filter(x=>x.tasks.length);
+  return `
+  <header class="hero">
+    <p class="eyebrow">Partes y envíos</p>
+    <h1>Enviar</h1>
+    <p class="sub">Copia un parte breve por equipo o ábrelo en WhatsApp.</p>
+  </header>
+  <div class="pad">
+    ${byTeam.length===0?'<p class="empty">Aún no hay tareas para enviar.</p>':byTeam.map(({team,tasks})=>{
+      const lines = tasks.map(t => `• ${t.taskType} · ${zoneLabel(findZone(t.zoneId))}`).join('\n');
+      const msg = `Parte ${team.name}\n${formatDisplayDate(deviceDateISO())}\n\n${lines}\n\nListo. Sergio`;
+      return `<article class="card">
+        <div class="row"><div><strong>${esc(team.name)}</strong><div class="meta">${tasks.length} registro${tasks.length===1?'':'s'}</div></div>
+        <a class="btn ghost" href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp</a></div>
+        <pre style="white-space:pre-wrap;font-family:inherit;font-size:12.5px;color:#243D34;background:#F1F7F3;border-radius:12px;padding:10px;margin:12px 0 0">${esc(msg)}</pre>
+      </article>`;
+    }).join('')}
+  </div>`;
+}
+
+function renderReportes(){
+  const groups = {};
+  for(const t of state.tasks){
+    const team = findTeam(t.teamId)?.name || 'Equipo';
+    groups[team] = groups[team] || {todo:0,doing:0,done:0};
+    if(t.status==='TODO') groups[team].todo++;
+    if(t.status==='DOING') groups[team].doing++;
+    if(t.status==='DONE') groups[team].done++;
+  }
+  const rows = Object.entries(groups).sort((a,b)=>a[0].localeCompare(b[0],'es'));
+  return `
+  <header class="hero">
+    <p class="eyebrow">Análisis de campo</p>
+    <h1>Reportes</h1>
+    <p class="sub">Resumen por equipo sobre este dispositivo.</p>
+  </header>
+  <div class="pad">
+    <div class="card">
+      <div class="row" style="margin-bottom:8px"><strong>Por equipo</strong><span class="mono">${state.tasks.length} registros</span></div>
+      ${rows.length===0?'<p class="empty">Sin datos.</p>':rows.map(([label,r])=>`
+        <div class="row" style="padding:10px 0;border-top:1px solid #E4EDE8">
+          <div><div style="font-weight:700">${esc(label)}</div><div class="meta">Total ${r.todo+r.doing+r.done}</div></div>
+          <div class="mono" style="display:flex;gap:6px">
+            <span style="background:#FEF08A;padding:2px 6px;border-radius:6px">${r.todo}</span>
+            <span style="background:#D1FAE5;padding:2px 6px;border-radius:6px">${r.doing}</span>
+            <span style="background:#E8EEF0;padding:2px 6px;border-radius:6px">${r.done}</span>
+          </div>
+        </div>`).join('')}
+    </div>
+    <button class="btn dark" id="reset-data">Restablecer datos de ejemplo</button>
+  </div>`;
+}
+
+function activeTab(){
+  if(screen.name==='gestion') return 'gestion';
+  if(screen.name==='enviar') return 'enviar';
+  if(screen.name==='reportes') return 'reportes';
+  return 'inicio';
+}
+
+function render(){
+  const root = document.getElementById('app');
+  let body = '';
+  if(screen.name==='dashboard') body = renderDashboard();
+  else if(screen.name==='list') body = renderList(screen.status);
+  else if(screen.name==='gestion') body = renderGestion();
+  else if(screen.name==='form') body = renderForm();
+  else if(screen.name==='enviar') body = renderEnviar();
+  else if(screen.name==='reportes') body = renderReportes();
+  root.innerHTML = body + renderFab() + renderNav(activeTab());
+  bind();
+}
+
+function bind(){
+  document.getElementById('fab')?.addEventListener('click', ()=>{ fabOpen=!fabOpen; render(); });
+  document.getElementById('scrim')?.addEventListener('click', ()=>{ fabOpen=false; render(); });
+  document.querySelectorAll('[data-fab]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const a = btn.getAttribute('data-fab');
+      if(a==='nueva-tarea'){ ensureForm(null); go({name:'form'}); }
+      else if(a==='gestion') go({name:'gestion'});
+      else if(a==='enviar') go({name:'enviar'});
+      else if(a==='reportes') go({name:'reportes'});
+    });
+  });
+  document.querySelectorAll('[data-nav]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const t = btn.getAttribute('data-nav');
+      if(t==='inicio') go({name:'dashboard'});
+      if(t==='gestion') go({name:'gestion'});
+      if(t==='enviar') go({name:'enviar'});
+      if(t==='reportes') go({name:'reportes'});
+    });
+  });
+  document.querySelectorAll('[data-open]').forEach(btn=>{
+    btn.addEventListener('click', ()=> go({name:'list', status:btn.getAttribute('data-open')}));
+  });
+  document.querySelectorAll('[data-back]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(screen.name==='form' && form?.mode==='edit') go({name:'list', status:form.status});
+      else go({name:'dashboard'});
+    });
+  });
+  document.querySelectorAll('[data-edit]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const task = state.tasks.find(t=>t.id===btn.getAttribute('data-edit'));
+      if(!task) return;
+      ensureForm(task);
+      go({name:'form'});
+    });
+  });
+  const gq = document.getElementById('gestion-q');
+  if(gq){
+    gq.addEventListener('input', e=>{ gestionQ = e.target.value; render(); const el=document.getElementById('gestion-q'); if(el){ el.focus(); el.setSelectionRange(gestionQ.length, gestionQ.length);} });
+  }
+  const teamSel = document.getElementById('f-team');
+  if(teamSel){
+    teamSel.addEventListener('change', e=>{
+      form.teamId = e.target.value;
+      form.zoneQ = '';
+      const team = findTeam(form.teamId);
+      const types = typesForTeam(team);
+      form.taskType = types[0]||'';
+      const zones = zonesForTeam(team);
+      form.zoneId = zones[0]?.id || '';
+      render();
+    });
+  }
+  document.querySelectorAll('[data-type]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ form.taskType = btn.getAttribute('data-type'); render(); });
+  });
+  document.querySelectorAll('[data-status]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ form.status = btn.getAttribute('data-status'); render(); });
+  });
+  const zq = document.getElementById('f-zoneq');
+  if(zq){
+    zq.addEventListener('input', e=>{ form.zoneQ = e.target.value; render(); const el=document.getElementById('f-zoneq'); if(el){ el.focus(); el.setSelectionRange(form.zoneQ.length, form.zoneQ.length);} });
+  }
+  const zs = document.getElementById('f-zone');
+  if(zs){ zs.addEventListener('change', e=>{ form.zoneId = e.target.value; }); }
+  const cm = document.getElementById('f-comment');
+  if(cm){ cm.addEventListener('input', e=>{ form.comment = e.target.value; }); }
+  document.getElementById('f-save')?.addEventListener('click', saveTask);
+  document.getElementById('reset-data')?.addEventListener('click', ()=>{
+    if(!confirm('¿Restablecer equipos, zonas y tareas de ejemplo?')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    state = loadState();
+    go({name:'dashboard'});
+  });
+}
+
+render();
+</script>
+</body>
+</html>
